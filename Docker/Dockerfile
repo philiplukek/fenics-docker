@@ -1,4 +1,4 @@
-ARG GMSH_VERSION=4.3.0
+ARG GMSH_VERSION=4.8.0
 ARG TINI_VERSION=v0.18.0
 
 FROM quay.io/fenicsproject/stable:2019.1.0.r3 as base
@@ -9,6 +9,19 @@ COPY .bashrc /home/fenics
 ARG GMSH_VERSION
 WORKDIR /tmp
 
+# Clone FEniCS-shells 
+
+RUN git clone https://github.com/umeenukrishnan/fenics-shell.git && \
+    cd fenics-shell && \
+    python3 setup.py install
+
+# Install TIGAR
+
+RUN git clone https://github.com/david-kamensky/tIGAr.git && \
+    cd tIGAr && \
+    python3 setup.py install
+
+
 # Download Install gmsh
 RUN cd /usr/local && \
     wget -nc --quiet http://gmsh.info/bin/Linux/gmsh-${GMSH_VERSION}-Linux64.tgz && \
@@ -18,13 +31,17 @@ ENV PATH=/usr/local/gmsh-${GMSH_VERSION}-Linux64/bin:$PATH
 RUN pip install --upgrade pip
 RUN pip install sphinx
 
-# RUN pip3 install --no-cache-dir --no-binary=h5py h5py pygmsh
+RUN pip3 install pygmsh
 RUN pip3 install --no-cache-dir --no-binary=h5py h5py
 RUN pip3 install --no-cache-dir meshio==3.2.7
 
 RUN pip install numba
 RUN pip install scipy --upgrade
 RUN pip install sklearn
+RUN pip install lxml
+RUN pip install meshx 
+
+
 WORKDIR /root
 
 ########################################
