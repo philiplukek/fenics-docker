@@ -1,7 +1,7 @@
 ARG GMSH_VERSION=4.8.0
 ARG TINI_VERSION=v0.18.0
 
-FROM quay.io/fenicsproject/stable:2019.1.0.r3 as base
+FROM quay.io/fenicsproject/stable:2019.1.0.r2 as base
 
 WORKDIR /home/fenics
 COPY .bashrc /home/fenics
